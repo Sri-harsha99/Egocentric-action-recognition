@@ -1,0 +1,192 @@
+{% load static %}
+
+<html>
+    <head>
+         <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </head>
+    <style>
+      .main-content-output {
+          min-height: 10vh;
+          padding: 2%;
+      }
+    </style>
+    <body>        
+        <nav class="nav-bar">
+        <div class="nav-wrapper" style="padding-left: 1%;">
+            <ul id="nav-mobile" class="left">
+              <li><a href="{% url 'upload_video' %}" style="font-size: 30;">FA</a></li>
+              <li><a href="{% url 'actions'  %}" style="font-size: 30;">Actions</a></li>
+            </ul>
+        </div>
+        </nav>
+        <div class="main-content-output">
+            <div>
+                <blockquote style="font-size: 24;">
+                    Prediction : {{predicted}}
+                </blockquote>
+            </div>
+            
+        </div>
+        <div class="main-content-output">
+          <div>
+              <blockquote style="font-size: 24;">
+                Is the prediction correct?
+                <br>
+                  <input type="hidden" id = "url_" name = 'url_' value="{{ url }}">
+                  <button class="btn waves-effect waves-light" style="margin-left: 10px;" id="Yes" type="submit" name="Yes" value="Yes">Yes
+                  </button>
+                  <button class="btn waves-effect waves-light" style="margin-left: 50px;" id="No" type="submit" name="No" value="No">No
+                  </button>
+              </blockquote>
+          </div>
+          
+      </div>
+      <div id="permission" class="main-content-output">
+        <div>
+          <!-- <form method="GET" action=""> -->
+            <!-- {% csrf_token %} -->
+            <blockquote style="font-size: 24;">
+              Do you want to help us to increase accuracy by giving us your video and it's action?    
+              <br>          
+                <button class="btn waves-effect waves-light" style="margin-left: 10px;" id="P-Yes" type="submit" name="P-Yes" value="Yes">Yes
+                </button>
+                <button class="btn waves-effect waves-light" style="margin-left: 50px;" id="P-No" type="submit" name="P-No" value="No">No
+                </button>
+            </blockquote>
+          <!-- </form> -->
+        </div>
+        
+    </div>
+    <div id="action" class="main-content-output">
+      <div>
+          <blockquote style="font-size: 24;">
+            Select the correct action of your video from this dropdown
+            <br>
+              <select name="" id="select-action">
+                <option value="" disabled selected>Choose your action</option>
+                <option value="close">Close</option>
+                <option value="open">Open</option>
+                <option value="pour">Pour</option>
+                <option value="put">Put</option>
+                <option value="scoop">Scoop</option>
+                <option value="spread">Spread</option>
+                <option value="stir">Stir</option>
+                <option value="take">Take</option>
+              </select>
+              <button class="btn waves-effect waves-light" style="margin-left: 10px;" id="submit" type="submit" name="P-Yes" >Submit
+              </button>
+          </blockquote>
+      </div>
+      
+  </div>
+  <div id="thankyou" class="main-content-output">
+    <div>
+        <blockquote style="font-size: 24;">
+          No problem! Thanks for visiting the site
+        </blockquote>
+    </div>
+    
+  </div>
+  <div id="disp"></div>
+<footer class="page-footer" style="margin-top: 160px;">
+            <div class="container">
+              <div class="row">
+                <div class="col l6 s12">
+                  <h5 class="white-text">First Person Action Recognition</h5>
+                  <p class="grey-text text-lighten-4">First person action recognition or egocentric action recognition is a sub-field of computer vision that entails analyzing images and videos captured by a wearable camera, which is typically worn on the head and approximates the visual field of the camera wearer.</p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                  <h5 class="white-text">Links</h5>
+                  <ul>
+                    <li><a class="grey-text text-lighten-3" target="_blank" href="http://cbs.ic.gatech.edu/fpv/">GTEA Dataset</a></li>
+                    <li><a class="grey-text text-lighten-3" target="_blank" href="https://www.cse.iitd.ac.in/~chetan/papers/pr2017.pdf">Research paper</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+    </footer>
+          <script type="text/javascript">
+          
+            
+            var prediction;
+            $(document).ready(function() {
+              $('#permission').hide();
+              $('#action').hide();
+              $('#thankyou').hide();
+              $('select').formSelect();
+              $('#Yes').click(()=>{
+                prediction = 'Yes';
+                $('#permission').show();
+              });
+              $('#No').click(()=>{
+                prediction = 'No';
+                $('#permission').show();
+              });
+              $('#P-Yes').click(()=>{
+                
+                if(prediction == "Yes") {
+                  
+                  $.ajax({
+                      type: 'POST',
+                      url: '/savevideo',
+                      headers:{
+                        "X-CSRFToken": '{{ csrf_token }}'
+                      },
+                      data: {
+                          'url' : $('#url_').val(),
+                          'action' :  '{{predicted}}' ,
+                      },
+                      success: display,
+                      dataType: 'html',
+                      error: function(result) {
+                          alert('error');
+                      }
+                  });
+                }
+                else {
+                  $('#action').show();
+                  $('#thankyou').hide();
+                }
+              });
+              $('#P-No').click(()=>{
+                $('#action').hide();
+                $('#thankyou').show();
+                $('#disp').hide();
+              });
+              $('#submit').click(()=> {
+                var action = $('#select-action').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/savevideo',
+                    headers:{
+                      "X-CSRFToken": '{{ csrf_token }}'
+                    },
+                    data: {
+                        'url' : $('#url_').val(),
+                        'action' : action,
+                    },
+                    success: display,
+                    dataType: 'html',
+                    error: function(result) {
+                        alert('error');
+                    }
+                });
+              })
+            })
+
+            function display(data,textStatus,jqXHR) {
+              $('#thankyou').hide();
+              $('#disp').html(data);
+              $('#disp').show();
+            }
+          
+
+          </script>
+    </body>
+</html>
+        

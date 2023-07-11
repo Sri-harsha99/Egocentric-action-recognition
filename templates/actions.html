@@ -1,0 +1,75 @@
+{% load static %}
+
+<html>
+    <head>
+         <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </head>
+    <body>        
+        <nav class="nav-bar">
+        <div class="nav-wrapper" style="padding-left: 1%;">
+            <ul id="nav-mobile" class="left">
+              <li><a href="{% url 'upload_video' %}" style="font-size: 30;">FA</a></li>
+              <li><a href="{% url 'actions'  %}" style="font-size: 30;">Actions</a></li>
+            </ul>
+        </div>
+        </nav>
+        <div class="main-content-action">
+                <div class="row">
+                    <div class="col s5">
+                        <div>
+                            <blockquote style="font-size: 24;">
+                                Currently we recognize below actions
+                            </blockquote>
+                        </div>
+                        <div style="font-size:20;font-weight: 400;">
+                            <ol>
+                                <li>Close</li>
+                                <li>Open</li>
+                                <li>Pour</li>
+                                <li>Put</li>
+                                <li>Scoop</li>
+                                <li>Spread</li>
+                                <li>Stir</li>
+                                <li>Take</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="row">
+                            <div class="col s12 m7">
+                              <div class="card">
+                                <div class="card-image">
+                                  <img src="">
+                                  <span class="card-title">Card Title</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                    </div>
+        </div>
+        <footer class="page-footer">
+            <div class="container">
+              <div class="row">
+                <div class="col l6 s12">
+                  <h5 class="white-text">Footer Content</h5>
+                  <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                  <h5 class="white-text">Links</h5>
+                  <ul>
+                    <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </footer>
+              
+    </body>
+</html>

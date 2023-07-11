@@ -1,0 +1,2 @@
+python test_rgb.py --dataset gtea_61 --root_dir dataset --seqLen 25 --testBatchSize 32 --memSize 512 \
+                   --outPoolSize 100 --split 2 --checkpoint D:/study/btp-project/btp/video_process/LSTA-master/gtea61/split2/rgb
